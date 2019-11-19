@@ -1,0 +1,13 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "max-classes-per-file": "off"
+      }
+    }
+  ]
+}
