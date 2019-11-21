@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Param } from '@nestjs/common';
+import { Controller, Get, Header, Param, Put } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { HelloService } from './hello.service';
 import { UserByIdPipe } from './users/user-by-id.pipe';
@@ -10,6 +10,12 @@ export class HelloController {
   @Get()
   @Header('Authorization', 'Bearer')
   greeting(): string {
+    return this.helloService.greeting();
+  }
+
+  @Put()
+  @Header('Authorization', 'Bearer')
+  updateGreeting(): string {
     return this.helloService.greeting();
   }
 

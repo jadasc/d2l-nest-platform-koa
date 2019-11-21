@@ -1,15 +1,22 @@
-import * as cors from '@koa/cors';
 import { RequestMethod } from '@nestjs/common';
 import { ErrorHandler, HttpServer, RequestHandler } from '@nestjs/common/interfaces';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
+import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { AbstractHttpAdapter } from '@nestjs/core/adapters/http-adapter';
 import * as http from 'http';
 import * as https from 'https';
 import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser';
 import { Key, pathToRegexp } from 'path-to-regexp';
 import * as Stream from 'stream';
+import { ViewsOptions } from '../interfaces/views-options.interface';
+
+// Only used for typing
+import * as koaCors from '@koa/cors';
+import * as koaMount from 'koa-mount';
+import * as koaViews from 'koa-views';
+import * as koaBodyParser from 'koa-bodyparser';
+import * as koaStatic from 'koa-static';
 
 export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Koa.Response> implements HttpServer {
   protected readonly instance: Koa;
@@ -127,10 +134,16 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
     return response.status = statusCode;
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public render() {
-    throw new Error('Not implemented');
+  public async render(response: Koa.Response, view: string, options: any) {
+    const ctx = response.ctx;
+    try {
+      await ctx.render(view, options);
+    } catch (e) {
+      response.ctx.app.emit('error', e, response.ctx);
+      return;
+    }
+    this.reply(response, response.body);
   }
 
   public redirect(response: Koa.Response, statusCode: number, url: string) {
@@ -141,7 +154,7 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public setErrorHandler(handler: (err: any, req: Koa.Request, res: Koa.Response) => void) {
-    return this.getInstance<Koa>().on('error', (err, ctx: Koa.Context) => handler(err, ctx.request, ctx.response));
+    return this.getInstance<Koa>().on('error', (err, ctx?: Koa.Context) => handler(err, ctx && ctx.request, ctx && ctx.response));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -167,6 +180,7 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
 
   public listen(port: string | number, callback?: () => void): http.Server;
   public listen(port: string | number, hostname: string, callback?: () => void): http.Server;
+  /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public listen(port: any, ...args: any[]): http.Server {
     return this.httpServer.listen(port, ...args);
@@ -176,15 +190,23 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
     return this.httpServer ? this.httpServer.close() : undefined;
   }
 
-  // TODO: Implement MVC
-  /* istanbul ignore next */
-  public useStaticAssets(): this {
-    throw new Error('Not implemented');
+  public useStaticAssets(root: string, opts?: koaStatic.Options & { prefix?: string }) {
+    const serve: typeof koaStatic = loadPackage('koa-static', 'KoaAdapter.useStaticAssets()', () => require('koa-static'));
+    let serveMiddleware = serve(root, opts);
+    if (opts.prefix) {
+      const mount: typeof koaMount = loadPackage('koa-mount', 'KoaAdapter.useStaticAssets()', () => require('koa-mount'));
+      serveMiddleware = mount(opts.prefix, serveMiddleware);
+    }
+    this.getInstance<Koa>().use(serveMiddleware);
+    return this;
   }
 
-  /* istanbul ignore next */
-  public setViewEngine(): this {
-    throw new Error('Not implemented');
+  public setViewEngine(opts: any): this { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const options = opts as ViewsOptions;
+    const views: typeof koaViews = loadPackage('koa-views', 'KoaAdapter.setViewEngine()', () => require('koa-views'));
+    const modifiedOpts = Object.assign({}, options, { autoRender: true });
+    this.getInstance<Koa>().use(views(modifiedOpts.dir, modifiedOpts));
+    return this;
   }
 
   public getRequestMethod(request: Koa.Request): string {
@@ -196,13 +218,13 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
   }
 
   public enableCors(options: CorsOptions) {
+    const cors: typeof koaCors = loadPackage('@koa/cors', 'KoaAdapter.enableCors()', () => require('@koa/cors'));
+    if (typeof options.origin === 'function') {
+      throw new Error('Not implemented');
+    }
     this.getInstance<Koa>().use(cors({
       ...options,
       origin: (ctx: Koa.Context) => {
-        /* istanbul ignore if */
-        if (typeof options.origin === 'function') {
-          throw new Error('Not implemented');
-        }
         if (typeof options.origin === 'string') {
           return options.origin;
         }
@@ -242,6 +264,7 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
 
   public initHttpServer(options: NestApplicationOptions) {
     const isHttpsEnabled = options && options.httpsOptions;
+    /* istanbul ignore if */
     if (isHttpsEnabled) {
       this.httpServer = https.createServer(
         isHttpsEnabled,
@@ -253,6 +276,7 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
   }
 
   public registerParserMiddleware() {
+    const bodyParser: typeof koaBodyParser = loadPackage('koa-body-parser', 'KoaAdapter.registerParserMiddleware()', () => require('koa-bodyparser'));
     return this.getInstance<Koa>().use(bodyParser());
   }
 

@@ -21,9 +21,15 @@ describe('KoaAdapter', () => {
     app.getHttpAdapter().getType().should.equal('koa');
   });
 
-  it('/hello', () => {
+  it('GET /hello', () => {
     return request(app.getHttpServer())
       .get('/hello')
+      .expect(200, 'Hello world!');
+  });
+
+  it('PUT /hello', () => {
+    return request(app.getHttpServer())
+      .put('/hello')
       .expect(200, 'Hello world!');
   });
 

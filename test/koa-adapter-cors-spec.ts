@@ -164,6 +164,14 @@ describe('KoaAdapter enableCors', () => {
     });
   });
 
+  describe('origin function', () => {
+    it('always fails', () => {
+      (() => app.enableCors({
+        origin: (_: string, cb) => cb(null, true),
+      })).should.throw();
+    });
+  });
+
   afterEach(async () => {
     await app.close();
   });
