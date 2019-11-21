@@ -1,6 +1,6 @@
 {
   "name": "d2l-nest-platform-koa",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Koa platform for nest",
   "private": true,
   "author": "D2L Corporation",
