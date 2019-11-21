@@ -8,14 +8,6 @@
 
 ```bash
 $ npm install --save d2l-nest-platform-koa
-$ # Required unless `bodyParser` option is set to false
-$ npm install --save koa-bodyparser
-$ # Required if cors is enabled
-$ npm install --save @koa/cors
-$ # Required if NestKoaApplication.useStaticAssets is used
-$ npm install --save koa-mount koa-static
-$ # Required if NestKoaApplication.setViewEngine is used
-$ npm install --save koa-views
 ```
 
 ## Usage
