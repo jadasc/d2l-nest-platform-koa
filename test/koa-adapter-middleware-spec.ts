@@ -3,7 +3,7 @@ import { Controller, Get, INestApplication, MiddlewareConsumer, Module } from '@
 import { Test } from '@nestjs/testing';
 import * as Koa from 'koa';
 import * as request from 'supertest';
-import { KoaAdapter } from '../';
+import { KoaAdapter } from '../index';
 import { ApplicationModule } from './src/app.module';
 
 const RETURN_VALUE = 'test';

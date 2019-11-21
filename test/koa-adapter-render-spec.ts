@@ -2,7 +2,7 @@
 import { Controller, Get, Module, Render } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { KoaAdapter, NestKoaApplication } from '../';
+import { KoaAdapter, NestKoaApplication } from '../index';
 import { ApplicationModule } from './src/app.module';
 
 @Controller()

@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as should from 'should';
 import * as request from 'supertest';
-import { KoaAdapter } from '../';
+import { KoaAdapter } from '../index';
 import { ApplicationModule } from './src/app.module';
 
 describe('KoaAdapter enableCors', () => {

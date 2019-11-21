@@ -1,7 +1,7 @@
 import { Controller, Get, INestApplication, Module, Param } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { KoaAdapter } from '../';
+import { KoaAdapter } from '../index';
 
 @Controller()
 class TestController {
