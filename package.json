@@ -1,17 +1,22 @@
 {
-  "name": "@d2l/nest-platform-koa",
+  "name": "d2l-nest-platform-koa",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Koa platform for nest",
+  "private": true,
+  "author": "D2L Corporation",
   "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf lib",
     "build": "nest build",
+    "prepare": "npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint --ext ts .",
     "test": "mocha",
     "test:watch": "mocha --watch",
-    "test:cov": "nyc mocha"
+    "test:cov": "nyc mocha",
+    "test:junit": "mocha --reporter mocha-junit-reporter"
   },
   "dependencies": {
     "koa": "^2.11.0",
@@ -19,7 +24,11 @@
   },
   "peerDependencies": {
     "@nestjs/common": "^6.7.2",
-    "@nestjs/core": "^6.7.2"
+    "@nestjs/core": "^6.7.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.2.1"
   },
   "devDependencies": {
     "@koa/cors": "^3.0.0",

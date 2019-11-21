@@ -11,6 +11,3 @@ insert_final_newline = true
 
 [*.html]
 indent_size = 4
-
-[*.{sln,njsproj}]
-end_of_line = crlf

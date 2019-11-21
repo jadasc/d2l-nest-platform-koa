@@ -1,6 +1,7 @@
 # compiled output
-/dist
+/lib
 /node_modules
+/*.tgz
 
 # Logs
 logs
