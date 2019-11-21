@@ -7,6 +7,7 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "repository": "https://github.com/Brightspace/d2l-nest-platform-koa.git",
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "nest build",
