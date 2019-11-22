@@ -1,5 +1,7 @@
 # D2L Nest Platform Koa
 
+[![CircleCI](https://circleci.com/gh/Brightspace/d2l-nest-platform-koa.svg?style=svg)](https://circleci.com/gh/Brightspace/d2l-nest-platform-koa)
+
 ## Description
 
 [Koa](https://koajs.com/) adapter for [Nest](https://github.com/nestjs/nest).
