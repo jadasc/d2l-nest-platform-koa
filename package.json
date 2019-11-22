@@ -4,7 +4,7 @@
   "description": "Koa platform for nest",
   "private": true,
   "author": "D2L Corporation",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "repository": "https://github.com/Brightspace/d2l-nest-platform-koa.git",
