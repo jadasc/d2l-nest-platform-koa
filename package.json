@@ -2,7 +2,6 @@
   "name": "d2l-nest-platform-koa",
   "version": "0.0.4",
   "description": "Koa platform for nest",
-  "private": true,
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "main": "./lib/index.js",
