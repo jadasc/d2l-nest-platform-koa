@@ -1,6 +1,6 @@
 {
   "name": "d2l-nest-platform-koa",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Koa platform for nest",
   "author": "D2L Corporation",
   "license": "Apache-2.0",
