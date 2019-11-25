@@ -98,7 +98,7 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
     const code = ctx.status;
 
     // status body
-    if (null === body) {
+    if (null === body || undefined === body) {
       if (ctx.req.httpVersionMajor >= 2) {
         body = String(code);
       } else {
