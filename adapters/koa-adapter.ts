@@ -217,6 +217,10 @@ export class KoaAdapter extends AbstractHttpAdapter<http.Server, Koa.Request, Ko
     return request.url;
   }
 
+  public getRequestHostname(request: Koa.Request): string {
+    return request.hostname;
+  }
+
   public enableCors(options: CorsOptions) {
     const cors: typeof koaCors = loadPackage('@koa/cors', 'KoaAdapter.enableCors()', () => require('@koa/cors'));
     if (typeof options.origin === 'function') {
